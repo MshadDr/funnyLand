@@ -1,0 +1,5 @@
+app:
+  port: 8601
+  environment: local
+  secret_key: "H#4k24Sld8$ka9!"
+  expiration_time: 24 # hr

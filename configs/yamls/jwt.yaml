@@ -1,0 +1,4 @@
+jwt:
+  secret_key: "H#4k24Sld8$ka9!"
+  reset_pw_key: "H#rp$8ma2sak9!"
+  expiration_time: 24 # hr
