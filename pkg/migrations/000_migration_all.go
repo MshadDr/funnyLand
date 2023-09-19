@@ -9,7 +9,9 @@ import (
 func Up(db *gorm.DB, modelName string) error {
 
 	modelsName := map[string]interface{}{
-		"vendors": &model.Vendor{},
+		"users":       &model.User{},
+		"connections": &model.Connection{},
+		"accounts":    &model.Account{},
 	}
 
 	if len(modelName) > 0 {
@@ -24,7 +26,9 @@ func Up(db *gorm.DB, modelName string) error {
 	}
 
 	err := db.AutoMigrate(
-		&model.Vendor{},
+		&model.User{},
+		&model.Connection{},
+		&model.Account{},
 	)
 	if err != nil {
 		return err
@@ -37,7 +41,9 @@ func Up(db *gorm.DB, modelName string) error {
 func Down(db *gorm.DB, modelName string) error {
 
 	modelsName := map[string]interface{}{
-		"vendors": &model.Vendor{},
+		"users":       &model.User{},
+		"connections": &model.Connection{},
+		"accounts":    &model.Account{},
 	}
 
 	if len(modelName) > 0 {
@@ -52,7 +58,9 @@ func Down(db *gorm.DB, modelName string) error {
 	}
 
 	err := db.Migrator().DropTable(
-		&model.Vendor{},
+		&model.User{},
+		&model.Connection{},
+		&model.Account{},
 	)
 	if err != nil {
 		return nil

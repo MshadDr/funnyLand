@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"gitlab.com/M.darvish/funtory/internal/util"
+	"gitlab.com/M.darvish/funtory/internal/util/response"
 	"net/http"
 )
 
@@ -18,6 +18,6 @@ func NewHealthHandler() *HealthHandler {
 func (h HealthHandler) Health(w http.ResponseWriter, r *http.Request) {
 	h.Code = 222
 	h.Message = "health is ok"
-	_ = util.NewResponse(nil, h.Message, h.Code).Success(w)
+	_ = response.NewResponse(nil, h.Message, h.Code).Success(w)
 	return
 }

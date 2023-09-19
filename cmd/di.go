@@ -4,6 +4,7 @@ import (
 	"gitlab.com/M.darvish/funtory/api/routes"
 	"gitlab.com/M.darvish/funtory/internal/app/handler"
 	"gitlab.com/M.darvish/funtory/internal/database"
+	"gitlab.com/M.darvish/funtory/internal/model/repository"
 	"go.uber.org/dig"
 	"net/http"
 )
@@ -22,6 +23,13 @@ func NewDig() *dig.Container {
 		panic(err)
 	}
 	if err := container.Provide(handler.NewHealthHandler); err != nil {
+		panic(err)
+	}
+
+	if err := container.Provide(handler.NewUserHandler); err != nil {
+		panic(err)
+	}
+	if err := container.Provide(repository.NewUserImp); err != nil {
 		panic(err)
 	}
 

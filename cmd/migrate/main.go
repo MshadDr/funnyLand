@@ -1,9 +1,10 @@
-package pkg
+package main
 
 import (
 	"flag"
 	"fmt"
 	"gitlab.com/M.darvish/funtory/internal/database"
+	pkg "gitlab.com/M.darvish/funtory/pkg/migrations"
 	"log"
 )
 
@@ -35,7 +36,7 @@ func main() {
 	if migrateUp {
 
 		if modelName != "" {
-			err = Up(db, modelName)
+			err = pkg.Up(db, modelName)
 			if err != nil {
 				log.Fatalln(err)
 			}
@@ -43,7 +44,7 @@ func main() {
 			return
 		}
 
-		err = Up(db, modelName)
+		err = pkg.Up(db, modelName)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -52,7 +53,7 @@ func main() {
 	} else if migrateDown {
 
 		if modelName != "" {
-			err = Down(db, modelName)
+			err = pkg.Down(db, modelName)
 			if err != nil {
 				log.Fatalln(err)
 			}
@@ -60,14 +61,13 @@ func main() {
 			return
 		}
 
-		err = Down(db, modelName)
+		err = pkg.Down(db, modelName)
 		if err != nil {
 			log.Fatalln(err)
 		}
 		fmt.Println("Migrations down completed successfully.")
 
 	} else {
-
 		fmt.Println("Please specify -up or -down flag.")
 	}
 }
