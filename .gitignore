@@ -27,3 +27,4 @@ vscode/*
 .idea
 /main
 /storage/
+/sessions/

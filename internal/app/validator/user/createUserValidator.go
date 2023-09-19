@@ -9,7 +9,7 @@ type RegisterUser struct {
 	Username          string `json:"username" validate:"required"`
 	Password          string `json:"password" validate:"required,eqfield=ConfirmedPassword"`
 	ConfirmedPassword string `json:"confirmed_password" validate:"required"`
-	Phone             string `json:"phone" validate:"required,phone"`
+	Phone             string `json:"phone" validate:"required"`
 }
 
 // NewRegisterUserValidator NewRegisterUser register validation constructor

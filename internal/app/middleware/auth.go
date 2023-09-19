@@ -32,10 +32,9 @@ func ValidateJwtAuthToken(userRepo repository.IUser, next http.HandlerFunc) http
 
 		// Add the token and username to the request context
 		ctx := context.WithValue(r.Context(), "username", username)
-		ctx = context.WithValue(ctx, "userId", user.ID)
+		ctx = context.WithValue(ctx, "userId", int(user.ID))
 		ctx = context.WithValue(ctx, "phone", user.Phone)
 		r = r.WithContext(ctx)
-
 		// Call the next handler in the chain
 		next.ServeHTTP(w, r)
 	})

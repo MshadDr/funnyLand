@@ -13,8 +13,8 @@ type APIRouteHandler struct {
 
 func NewAPIRouteHandler(healthHandler *handler.HealthHandler,
 	userRepo repository.IUser,
-	userHandler handler.UserHandler) *APIRouteHandler {
-
+	userHandler *handler.UserHandler) *APIRouteHandler {
+	// create routes by using di
 	apiRouterHandler := &APIRouteHandler{
 		Router: chi.NewRouter(),
 	}
@@ -25,7 +25,7 @@ func NewAPIRouteHandler(healthHandler *handler.HealthHandler,
 		r.Route("/users", func(users chi.Router) {
 			users.Post("/login", userHandler.Login)
 			users.Post("/register", userHandler.Register)
-			users.Get("/{id}}", middleware.ValidateJwtAuthToken(userRepo, userHandler.ConnectAccount))
+			users.Get("/connect", middleware.ValidateJwtAuthToken(userRepo, userHandler.ConnectAccount))
 		})
 	})
 	return apiRouterHandler

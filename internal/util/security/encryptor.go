@@ -7,7 +7,6 @@ import (
 
 // EncryptPassword make a hash from a password
 func EncryptPassword(password string) (string, error) {
-
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	return string(hashedPassword), err
 }

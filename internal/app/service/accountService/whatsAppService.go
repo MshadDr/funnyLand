@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"sync"
+	"time"
 )
 
 type WhatsAppSession struct {
@@ -57,14 +58,13 @@ func (w *WhatsAppService) Connect(userId int, phone string) error {
 	w.mu.Lock()
 	defer w.mu.Unlock()
 
-	// Check if a session already exists for this user and phone number.
+	// Check if a session already exists
 	userInfo, err := w.ur.GetByUserId(userId)
 	if err != nil {
 		return err
 	}
 	session := userInfo.Session
-	if session == "nil" {
-		// If no session exists, create a new one and save it.
+	if session == "" {
 		newSession := &WhatsAppSession{
 			UserId:      userId,
 			Phone:       userInfo.Phone,
@@ -74,8 +74,11 @@ func (w *WhatsAppService) Connect(userId int, phone string) error {
 		newSession.SessionData["token"], err = security.EncryptWhatsappToken(userId, userInfo.Phone)
 		newSession.SessionData["authenticationData"] = userId
 
+		currentTime := time.Now()
+		timestamp := currentTime.Format("2006-01-02_15-04-05")
+
 		// Save the new session.
-		sessionFilePath := fmt.Sprintf("sessions/%s_session.gob", phone)
+		sessionFilePath := fmt.Sprintf("sessions/%s_%s_session.gob", timestamp, phone)
 		if err := saveWhatsAppSession(newSession, sessionFilePath); err != nil {
 			return err
 		}

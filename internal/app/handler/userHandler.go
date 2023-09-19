@@ -23,6 +23,7 @@ func NewUserHandler(userRepo repository.IUser) *UserHandler {
 }
 
 func (u *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
+	// register new user
 	message := "request was processed successfully"
 
 	var inputs map[string]string
@@ -32,21 +33,21 @@ func (u *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
 		_ = response.NewResponse(err, message, 422).Failed(w)
 		return
 	}
-
+	// validate inputs
 	inputValidationErr := user.NewRegisterUserValidator(inputs).RegisterUserValidation()
 	if len(inputValidationErr) > 0 {
 		message = "Failed to validated inputs"
 		_ = response.NewResponse(inputValidationErr, message, 422).Failed(w)
 		return
 	}
-
+	// encrypt password
 	password, err := security.EncryptPassword(inputs["password"])
 	if err != nil {
 		message = "can not secure the password"
 		_ = response.NewResponse(err, message, 422).Failed(w)
 		return
 	}
-
+	// create user
 	err = u.ur.Register(&model.User{
 		Username: inputs["username"],
 		Password: password,
@@ -58,7 +59,7 @@ func (u *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
 		_ = response.NewResponse(err, message, 400).Failed(w)
 		return
 	}
-
+	// generate jwt token
 	token, err := jwt.GetAuthToken(inputs["username"])
 
 	if err != nil {
@@ -75,6 +76,7 @@ func (u *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
 }
 
 func (u *UserHandler) ConnectAccount(w http.ResponseWriter, r *http.Request) {
+	// connect to whatsapp
 	message := "request was processed successfully"
 
 	ctx := r.Context()
@@ -91,7 +93,7 @@ func (u *UserHandler) ConnectAccount(w http.ResponseWriter, r *http.Request) {
 		_ = response.NewResponse("", message, 422).Failed(w)
 		return
 	}
-
+	// whatsapp service
 	err := accountService.NewWhatsAppService(u.ur).Connect(userId, userPhone)
 	if err != nil {
 		message = "the connection was not established"
@@ -104,6 +106,7 @@ func (u *UserHandler) ConnectAccount(w http.ResponseWriter, r *http.Request) {
 }
 
 func (u *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
+	// login to get jwt token
 	message := "request was processed successfully"
 	var inputs map[string]string
 	err := json.NewDecoder(r.Body).Decode(&inputs)
